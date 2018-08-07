@@ -1,2 +1,2 @@
-sleep 15;
+sleep 20;
 java -jar app.jar
