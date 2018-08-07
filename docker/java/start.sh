@@ -1,3 +1,2 @@
-#!/bin/bash
-sleep 20
+sleep 15;
 java -jar app.jar
