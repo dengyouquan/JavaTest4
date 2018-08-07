@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hand.infra.mapper.FilmMapper">
+    <insert id="insert" parameterType="Film" useGeneratedKeys="true" keyProperty="filmId">
+    insert into film (film_id, title, release_year,
+      language_id, original_language_id, rental_duration,
+      rental_rate, length, replacement_cost,
+      rating, special_features, last_update,
+      description)
+    values (#{filmId,jdbcType=SMALLINT}, #{title,jdbcType=VARCHAR}, #{releaseYear,jdbcType=DATE},
+      #{languageId,jdbcType=TINYINT}, #{originalLanguageId,jdbcType=TINYINT}, #{rentalDuration,jdbcType=TINYINT},
+      #{rentalRate,jdbcType=DECIMAL}, #{length,jdbcType=SMALLINT}, #{replacementCost,jdbcType=DECIMAL},
+      #{rating,jdbcType=CHAR}, #{specialFeatures,jdbcType=CHAR}, #{lastUpdate,jdbcType=TIMESTAMP},
+      #{description,jdbcType=LONGVARCHAR})
+  </insert>
+</mapper>

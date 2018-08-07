@@ -1,0 +1,17 @@
+# maven ignore
+*/Exam1/target/
+Exam1/target/
+docker/java/*.jar
+
+# idea ignore
+.idea/
+.mvn/
+*.iml
+
+
+# temp ignore
+*.log
+*.cache
+*.diff
+*.patch
+*.tmp
