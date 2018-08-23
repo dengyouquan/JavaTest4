@@ -12,5 +12,5 @@ import com.hand.domain.entity.Film;
 public interface FilmService {
     void insert(Film film);
 
-    void insertFilm(boolean success, Film film);
+    void insertFilm(boolean success, Film film) throws Exception;
 }

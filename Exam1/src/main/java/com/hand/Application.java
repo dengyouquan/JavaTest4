@@ -2,13 +2,16 @@ package com.hand;
 
 import com.hand.api.service.FilmService;
 import com.hand.domain.entity.Film;
+import com.hand.infra.util.AfterInsertFilmEventPublisher;
+import com.hand.infra.util.BeforeInsertFilmEventPublisher;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.Date;
 
 public class Application {
-    private static ApplicationContext ctx;
+    private static ConfigurableApplicationContext ctx;
 
     static {
         ctx = new ClassPathXmlApplicationContext(
@@ -16,7 +19,7 @@ public class Application {
     }
 
     public static void main(String[] args) {
-        System.out.println("Context Start");
+        ctx.start();
         FilmService filmService = (FilmService) ctx.getBean("filmService");
         String title = System.getenv("FILM_TITLE");
         String description = System.getenv("FILM_DESCRIPTION");
@@ -40,11 +43,25 @@ public class Application {
         System.out.println("Film Description:\n" + film.getDescription());
         System.out.println("Film LanguageId:\n" + film.getLanguageId());
         System.out.println("first insert");
-        filmService.insertFilm(false, film1);
+        BeforeInsertFilmEventPublisher publisher =
+                (BeforeInsertFilmEventPublisher) ctx.getBean("beforeInsertFilmEventPublisher");
+        AfterInsertFilmEventPublisher publisher1 =
+                (AfterInsertFilmEventPublisher) ctx.getBean("afterInsertFilmEventPublisher");
+        publisher.publish();
+        try {
+            filmService.insertFilm(false, film1);
+        } catch (Exception e) {
+            System.out.println("transcation rollback");
+        }
+        publisher1.publish();
         System.out.println("second insert");
-        filmService.insertFilm(true, film);
+        try {
+            filmService.insertFilm(true, film);
+        } catch (Exception e) {
+            System.out.println("transcation rollback");
+        }
         System.out.println("insert success");
-        System.out.println("Context Stop");
+        ctx.stop();
     }
 }
 

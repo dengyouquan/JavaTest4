@@ -17,7 +17,7 @@ services:
     links:
       - mysql-1
     environment:
-      MYSQL_IP: mysql-1
+      MYSQL_IP: localhost
       MYSQL_PORT: 3306
       USER_NAME: root
       PASS_WORD: 123456

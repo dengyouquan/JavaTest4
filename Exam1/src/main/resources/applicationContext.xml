@@ -18,11 +18,17 @@
         <property name="username" value="#{systemEnvironment['USER_NAME']}"/>
         <property name="password" value="#{systemEnvironment['PASS_WORD']}"/>
     </bean>
+    <bean id="sqlStatementInterceptor" class="com.hand.infra.util.SqlStatementInterceptor"/>
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
             <property name="dataSource" ref="dataSource"/>
             <!--configLocation属性指定mybatis的核心配置文件-->
         <property name="configLocation" value="applicationContext-mybatis.xml"/>
         <property name="mapperLocations" value="classpath:com/hand/infra/mapper/*.xml"/>
+        <property name="plugins">
+            <array>
+                <bean id="sqlStatementInterceptor" class="com.hand.infra.util.SqlStatementInterceptor" />
+            </array>
+        </property>
     </bean>
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="com.hand.infra.mapper"/>
@@ -40,11 +46,18 @@
 
     <bean id="event" class="com.hand.infra.util.EventUtil"/>
 
-    <aop:config>
-        <aop:aspect id="insertFilmEvent" ref="event">
-            <aop:pointcut id="insert" expression="execution(* com.hand.api.service.FilmService.*(..))"/>
-            <aop:before method="beforeInsertFilmEvent" pointcut-ref="insert"/>
-            <aop:after method="afterInsertFilmEvent" pointcut-ref="insert"/>
-        </aop:aspect>
-    </aop:config>
+    <!--<aop:config>-->
+        <!--<aop:aspect id="insertFilmEvent" ref="event">-->
+            <!--<aop:pointcut id="insert" expression="execution(* com.hand.api.service.FilmService.*(..))"/>-->
+            <!--<aop:before method="beforeInsertFilmEvent" pointcut-ref="insert"/>-->
+            <!--<aop:after method="afterInsertFilmEvent" pointcut-ref="insert"/>-->
+        <!--</aop:aspect>-->
+    <!--</aop:config>-->
+
+    <bean id="startApplicationContext" class="com.hand.infra.util.StartApplicationContext"/>
+    <bean id="stopApplicationContext" class="com.hand.infra.util.StopApplicationContext"/>
+    <bean id="afterInsertFilmEventListener" class="com.hand.infra.util.AfterInsertFilmEventListener"/>
+    <bean id="beforeInsertFilmEventListener" class="com.hand.infra.util.BeforeInsertFilmEventListener"/>
+    <bean id="beforeInsertFilmEventPublisher" class="com.hand.infra.util.BeforeInsertFilmEventPublisher"/>
+    <bean id="afterInsertFilmEventPublisher" class="com.hand.infra.util.AfterInsertFilmEventPublisher"/>
 </beans>

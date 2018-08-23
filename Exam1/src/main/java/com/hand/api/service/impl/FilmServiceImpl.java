@@ -33,17 +33,13 @@ public class FilmServiceImpl implements FilmService {
     film:要插入的Film
      */
     @Transactional(rollbackFor = Exception.class)
-    public void insertFilm(boolean success, Film film) {
+    public void insertFilm(boolean success, Film film) throws Exception {
         long startTime = System.currentTimeMillis();
         filmMapper.insert(film);
         long endTime = System.currentTimeMillis();
         System.out.println("sql cost time:" + (endTime - startTime) + "ms");
         if (!success) {
-            try {
-                throw new Exception();
-            } catch (Exception e) {
-                System.out.println("transaction rollback");
-            }
+            throw new Exception();
         }
     }
 }
